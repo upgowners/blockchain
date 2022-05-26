@@ -1,0 +1,69 @@
+
+
+website :-https://www.srcmake.com/home/iroha-tutorial
+
+Step 1
+open terminal and run this command
+# For creating docker
+sudo apt-get install curl   
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -   
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt-get update
+apt-cache policy docker-ce
+sudo apt-get install -y docker-ce
+
+#create a docker network
+sudo docker network create srcmake-iroha-network
+
+#we're going to add PostgreSQL to our network. 
+sudo docker run --name some-postgres \
+-e POSTGRES_USER=postgres \
+-e POSTGRES_PASSWORD=mysecretpassword \
+-p 5432:5432 \
+--network=srcmake-iroha-network \
+-d postgres:9.5
+
+#we'll create a volume of persistant storage named "blockstore" to store the blocks for our blockchain.
+sudo docker volume create blockstore
+
+#we need to configure Iroha on the network. Download the Iroha code from github
+sudo apt-get install git
+git clone -b develop https://github.com/hyperledger/iroha --depth=1
+
+
+# use the Iroha configuration that's been prepared as an example to run the Iroha docker container. 
+sudo docker run -it --name iroha \
+-p 50051:50051 \
+-v $(pwd)/iroha/example:/opt/iroha_data \
+-v blockstore:/tmp/block_store \
+--network=srcmake-iroha-network \
+--entrypoint=/bin/bash \
+hyperledger/iroha:latest
+
+#​Now we're going to actually run Iroha.
+irohad --config config.docker --genesis_block genesis.block --keypair_name node0
+-----------------------------------------------------------------------------------
+#Open new terminals and selct the following options
+#Open a new terminal (don't close the one with our Iroha network!) and attach the docker container to our terminal. 
+sudo docker exec -it iroha /bin/bash
+
+#We should be inside the docker container's shell. Launch the iroha-cli tool and login as admin@test. 
+iroha-cli -account_name admin@test
+
+
+
+14
+3
+16 (Asset id:mscit#test)
+   (Amount to add: 12.56)
+4
+2
+8  (account id:admin@test)
+   (asset id:mscit#test)
+1  (peer adress and port same as default given in bracket)
+
+
+
+
+
+

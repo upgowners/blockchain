@@ -1,0 +1,146 @@
+Implement and demonstrate the use of the following in Solidity: Functions, Function
+Modifiers, View functions, Pure Functions, Fallback Function, Function Overloading,
+Mathematical functions, Cryptographic functions.
+
+FUNCTION CALLING -
+
+// Solidity program to demonstrate
+// function calling
+pragma solidity ^0.5.0;
+
+// Creating a contract
+contract Test {
+
+ // Defining a public view function to demonstrate
+ // calling of square function
+ function add() public view returns(uint){
+    uint num1 = 10;
+    uint num2 = 16;
+    uint sum = num1 + num2;
+    return square(sum); // calling function
+ }
+
+ //Defining public view square function
+ function square(uint num) public view returns(uint){
+    num = num ** 2;
+    return num;
+ }
+}
+
+
+MULTIPLE RETURN-
+
+// Solidity program to demonstrate
+// return statements
+pragma solidity ^0.5.0;
+// Creating a contract
+contract Test {
+
+ // Defining a public view function to
+ // demonstrate return statement
+    function return_example() public view returns(uint, uint, uint, string memory){
+        uint num1 = 26;
+        uint num2 = 24;
+        uint sum = num1 + num2;
+        uint prod = num1 * num2;
+        uint diff = num1 - num2;
+        string memory msg = "Multiple return values";
+        return (sum, prod, diff, msg);
+    }
+}
+
+
+VIEW FUNCTIONS 
+
+pragma solidity ^0.5.0;
+contract Test {
+function getResult() public view returns(uint product, uint sum){ 
+    uint a =1; // local variable
+    uint b = 2;
+    product = a * b; 
+    sum = a + b;
+    }
+}
+
+
+PURE FUNCTIONS
+
+pragma solidity ^0.5.0;
+contract Test {
+    function getResult() public pure returns(uint product, uint sum){
+    uint a = 1;
+    uint b = 2;
+    product = a * b;
+    sum = a + b;
+    }
+}
+
+
+FALLBACK FUNCTIONS-
+
+pragma solidity ^0.5.0;
+contract Test {
+    uint public x ;
+    function() external { x = 1; } 
+}
+contract Sink {
+    function() external payable { }
+}
+contract Caller {
+    function callTest(Test test) public returns (bool) {
+        (bool success,) = address(test).call(abi.encodeWithSignature("nonExistingFunction()"));
+        require(success);
+    // test.x is now 1
+        address payable testPayable = address(uint160(address(test)));
+    // Sending ether to Test contract,
+    // the transfer will fail, i.e. this returns false here.
+        return (testPayable.send(2 ether)); 
+    }
+    function callSink(Sink sink) public returns (bool) {
+        address payable sinkPayable = address(sink);
+        return (sinkPayable.send(2 ether)); 
+    }
+}
+
+
+
+FUNCTION OVERLOADING - 
+
+pragma solidity ^0.5.0;
+contract Test {
+ function getSum(uint a, uint b) public pure returns(uint){
+    return a + b;
+ }
+ function getSum(uint a, uint b, uint c) public pure returns(uint){
+    return a + b + c;
+ }
+ function callSumWithTwoArguments() public pure returns(uint){
+    return getSum(1,2);
+ }
+ function callSumWithThreeArguments() public pure returns(uint){
+    return getSum(1,2,3);
+ }
+}   
+
+
+MATHEMATICAL FUNCTIONS - 
+
+pragma solidity ^0.5.0;
+    contract Test {
+    function callAddMod() public pure returns(uint){ 
+        return addmod(4, 10, 5);
+    }
+    function callMulMod() public pure returns(uint){ 
+        return mulmod(4, 5, 7);
+    }
+}
+
+
+CRYPTOGRAPHIC FUNCTION
+
+pragma solidity^0.5.0; 
+    contract Test {
+    function callKeccak256() public pure returns(bytes32 result){
+        return keccak256("ABC"); 
+    }
+}

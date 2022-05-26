@@ -1,0 +1,99 @@
+Install on Ubuntu via PPAs
+The easiest way to install go-ethereum on Ubuntu-based distributions is with the built-in launchpad PPAs (Personal Package Archives). We provide a single PPA repository that contains both our stable and development releases for Ubuntu versions trusty, xenial, zesty and artful.
+
+linux:
+To enable our launchpad repository run:
+open terminal 1:
+http://gg.gg/yw3fb
+
+sudo apt-get install --reinstall ca-certificates
+
+sudo add-apt-repository -y ppa:ethereum/ethereum
+
+#Then install the stable version of go-ethereum:
+
+sudo apt-get update
+sudo apt-get install ethereum
+
+
+
+mkdir myblockchain
+
+cd myblockchain
+sudo nano genesis.json
+{
+  "config": {
+    "chainId": 10,
+    "homesteadBlock": 0,
+    "eip155Block": 0,
+    "eip158Block": 0,
+    "eip150Block": 0,
+    "eip150Hash": "0x0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "alloc": {},
+  "coinbase": "0x0000000000000000000000000000000000000000",
+  "difficulty": "0x02000000",
+  "extraData": "",
+  "gasLimit": "0x2fefd8",
+  "nonce": "0x0000000000000042",
+  "mixhash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "timestamp": "0x00"
+}
+
+save the file
+ctrl +o to write
+ {enter} save
+ ctrl +x exit
+
+
+
+1. initialise the block
+
+sudo geth --datadir TestChain init genesis.json
+
+2. create network
+sudo geth --datadir TestChain --networkid 1234 
+
+open terminal 2:
+cd myblockchain
+sudo geth attach TestChain/geth.ipc
+personal.newAccount("123456")
+eth.getBalance(eth.accounts[0])
+miner.start()
+miner.setEtherbase(eth.accounts[0])
+admin.addPeer(admin.nodeInfo.enode)
+8-
+admin.addPeer(output of 7)
+9-eth.getBalance("0x5da9e5a96e291abf5657fb4ef31a26748ad53f8b")
+if ether balance is 0 wait for 10-20minutes for mining process to get complete
+
+Miner.start(1) - start mining
+eth.blockNumber - current block height
+eth.getBlock(number).miner - miner of block at that number
+eth.getBalance(account address) - current balance of that account
+
+
+https://medium.com/swlh/how-to-set-up-a-private-ethereum-blockchain-c0e74260492c
+
+https://www.youtube.com/watch?v=49KK8MbMggQ&list=PL6TbWIxWsLY0VPlese2_z5xDZZ33ZuvV6&index=19
+
+
+personal.unlockAccount(eth.accounts[0])
+
+
+greeterTx = greeterInterface.new(
+
+"MyContract",
+
+{
+
+from: eth.accounts[0],
+
+data: greeterHex,
+
+gas: 1000000
+
+}
+
+)
